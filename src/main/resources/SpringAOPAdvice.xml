@@ -1,0 +1,36 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="customerServiceBean" class="com.test.spring.CustomerService">
+        <property name="name" value="阳祥伟"/>
+        <property name="url" value="http://www.baidu.com"/>
+    </bean>
+
+    <bean id="hiBeforeMethodBean" class="com.test.spring.BeforeMethod"/>
+    <bean id="hiAfterMethodBean" class="com.test.spring.AfterMethod"/>
+    <bean id="hiThrowExceptionBean" class="com.test.spring.ThrowExceptionMethod"/>
+    <bean id="hiAroundMethodBean" class="com.test.spring.AroundMethod"/>
+
+    <bean id="customerServiceProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+            <property name="target" ref="customerServiceBean"/>
+            <property name="interceptorNames">
+                <list>
+                    <value>customerAdvisor</value>
+                </list>
+            </property>
+    </bean>
+    <!--<bean id="customerPointcut" class="org.springframework.aop.support.NameMatchMethodPointcut">
+        <property name="mappedName" value="printName"/>
+    </bean>
+-->
+    <bean id="customerAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+      <!--  <property name="pointcut" ref="customerPointcut"/>-->
+        <property name="mappedName"   value="printURL"/>
+        <property name="advice" ref="hiAroundMethodBean"/>
+    </bean>
+
+
+
+</beans>
